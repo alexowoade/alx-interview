@@ -1,12 +1,3 @@
-·55 lines (49 loc) · 1.58 KB
-Breadcrumbsalx-interview/0x03-log_parsing
-/0-stats.py
-File metadata and controls
-
-Code
-
-Blame
-def parseLogs():
 #!/usr/bin/python3
 """
 A script: Reads standard input line by line and computes metrics
