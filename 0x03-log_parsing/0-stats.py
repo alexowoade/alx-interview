@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-"""
-A script: Reads standard input line by line and computes metrics
-"""
+
+import sys
+
 def parseLogs():
     """
     Reads logs from standard input and generates reports
@@ -10,31 +10,30 @@ def parseLogs():
     Raises:
         KeyboardInterrupt (Exception): handles this exception and raises it
     """
-    stdin = __import__('sys').stdin
     lineNumber = 0
     fileSize = 0
     statusCodes = {}
-    codes = ('200', '301', '400', '401', '403', '404', '405', '500')
+    codes = {'200', '301', '400', '401', '403', '404', '405', '500'}
+
     try:
-        for line in stdin:
+        for line in sys.stdin:
             lineNumber += 1
-            line = line.split()
+            elements = line.strip().split()
             try:
-                fileSize += int(line[-1])
-                if line[-2] in codes:
-                    try:
-                        statusCodes[line[-2]] += 1
-                    except KeyError:
-                        statusCodes[line[-2]] = 1
+                fileSize += int(elements[-1])
+                if elements[-2] in codes:
+                    statusCodes[elements[-2]] = statusCodes.get(elements[-2], 0) + 1
             except (IndexError, ValueError):
                 pass
-            if lineNumber == 10:
+
+            if lineNumber % 10 == 0:
                 report(fileSize, statusCodes)
-                lineNumber = 0
+
         report(fileSize, statusCodes)
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt:
         report(fileSize, statusCodes)
         raise
+
 def report(fileSize, statusCodes):
     """
     Prints generated report to standard output
@@ -42,8 +41,10 @@ def report(fileSize, statusCodes):
         fileSize (int): total log size after every 10 successfully read line
         statusCodes (dict): dictionary of status codes and counts
     """
-    print("File size: {}".format(fileSize))
-    for key, value in sorted(statusCodes.items()):
-        print("{}: {}".format(key, value))
+    print("File size:", fileSize)
+    for key in sorted(statusCodes):
+        print(key + ":", statusCodes[key])
+
 if __name__ == '__main__':
     parseLogs()
+
