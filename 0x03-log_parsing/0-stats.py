@@ -1,50 +1,40 @@
+
+Breadcrumbsalx-interview/0x03-log_parsing
+/0-stats.py
+File metadata and controls
+
+Code
+
+Blame
 #!/usr/bin/python3
+"""Script that reads stdin line by line and computes metrics"""
 import sys
-
-def parseLogs():
-    """
-    Reads logs from standard input and generates reports
-    Reports:
-        * Prints log size after reading every 10 lines & at KeyboardInterrupt
-    Raises:
-        KeyboardInterrupt (Exception): handles this exception and raises it
-    """
-    lineNumber = 0
-    fileSize = 0
-    statusCodes = {}
-    codes = {'200', '301', '400', '401', '403', '404', '405', '500'}
-
-    try:
-        for line in sys.stdin:
-            lineNumber += 1
-            elements = line.strip().split()
-            try:
-                fileSize += int(elements[-1])
-                if elements[-2] in codes:
-                    statusCodes[elements[-2]] = statusCodes.get(elements[-2], 0) + 1
-            except (IndexError, ValueError):
-                pass
-
-            if lineNumber % 10 == 0:
-                report(fileSize, statusCodes)
-
-        report(fileSize, statusCodes)
-    except KeyboardInterrupt:
-        report(fileSize, statusCodes)
-        raise
-
-def report(fileSize, statusCodes):
-    """
-    Prints generated report to standard output
-    Args:
-        fileSize (int): total log size after every 10 successfully read line
-        statusCodes (dict): dictionary of status codes and counts
-    """
-    print("File size:", fileSize)
-    for key in sorted(statusCodes):
-        print(key + ":", statusCodes[key])
-
-if __name__ == '__main__':
-    parseLogs()
-
-
+def printsts(dic, size):
+    """ WWPrints information """
+    print("File size: {:d}".format(size))
+    for i in sorted(dic.keys()):
+        if dic[i] != 0:
+            print("{}: {:d}".format(i, dic[i]))
+sts = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
+       "404": 0, "405": 0, "500": 0}
+count = 0
+size = 0
+try:
+    for line in sys.stdin:
+        if count != 0 and count % 10 == 0:
+            printsts(sts, size)
+        stlist = line.split()
+        count += 1
+        try:
+            size += int(stlist[-1])
+        except:
+            pass
+        try:
+            if stlist[-2] in sts:
+                sts[stlist[-2]] += 1
+        except:
+            pass
+    printsts(sts, size)
+except KeyboardInterrupt:
+    printsts(sts, size)
+    raise
