@@ -1,11 +1,3 @@
-
-Breadcrumbsalx-interview/0x03-log_parsing
-/0-stats.py
-File metadata and controls
-
-Code
-
-Blame
 #!/usr/bin/python3
 """Script that reads stdin line by line and computes metrics"""
 import sys
